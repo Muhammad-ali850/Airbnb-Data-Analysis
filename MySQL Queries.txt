@@ -1,0 +1,14 @@
+-- create database data;
+
+-- import all five files
+
+CREATE TABLE all_cities AS
+SELECT * FROM athens
+UNION ALL
+SELECT * FROM lisbon
+UNION ALL
+SELECT * FROM london
+UNION ALL
+SELECT * FROM paris
+union all
+SELECT * FROM rome
