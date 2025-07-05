@@ -7,11 +7,12 @@ engine = create_engine("mysql+pymysql://root:root@localhost/data")
 df = pd.read_sql("SELECT * FROM all_cities", engine)
 
 #print(df.head())
-#print(df.shape)
-#print(df["city_name"].value_counts())
+#print("Size of dataset:\n  rows  columns\n" , df.shape)
+#print("We can guess the demands:\n",df["city_name"].value_counts())
 #print("Name of columns:\n", df.columns)
 #print("Data Types:\n", df.dtypes)
 #print("Missing Values:\n", df.isnull().sum())
+
 #with pd.option_context('display.max_columns', None, 'display.width', None):
     #print("Summary:\n\n", df.describe())
 
@@ -109,3 +110,25 @@ correlation3 = df[['city_center_distance', 'guest_satisfaction_overall']].corr()
 correlation4 = df[['metro_distance', 'guest_satisfaction_overall']].corr()
 print(correlation, "\n", correlation2, "\n", correlation3, "\n", correlation4)
 '''
+
+'''
+print('To see the premium and cheapest according to price per city:')
+dict = df.groupby('city_name')['price']
+for city, prices in dict:
+    prices_array = np.sort(prices.values)
+    print("\nCity:" , city)
+    print("Top 3 most expensive prices:", np.round(prices_array[-3:], 2))
+    print("Bottom 3 cheapest prices:", np.round(prices_array[:3], 2))
+'''
+
+dict = df.groupby('city_name')['price']
+for city, prices in dict:
+    prices_array = prices.values
+    mean = np.mean(prices_array)
+    std = np.std(prices_array)
+    z_scores = (prices_array - mean) / std
+    outliers = prices_array[np.abs(z_scores) > 3]
+    print("\nCity:" , city)
+    print("Number of price outliers:" ,len(outliers))
+    if len(outliers) > 0:
+        print("Outlier prices:" , outliers)
